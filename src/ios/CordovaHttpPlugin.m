@@ -20,9 +20,15 @@
 }
 
 - (void)setRequestHeaders:(NSDictionary*)headers forManager:(AFHTTPSessionManager*)manager {
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+
+    NSString *contentType = [headers objectForKey:@"Content-Type"];
+    if([contentType isEqualToString:@"application/json"]){
+      manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    } else {
+      manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    }
     [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+    [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
     }];
 }
 
@@ -102,7 +108,7 @@
 
     CordovaHttpPlugin* __weak weakSelf = self;
     manager.responseSerializer = [TextResponseSerializer serializer];
-    [manager PUT:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    [manager PUT:url parameters:parameters success:^(NSURLSessionTask *task, id responseObject) {
       NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [self setResults: dictionary withTask: task];
     [dictionary setObject:responseObject forKey:@"data"];
