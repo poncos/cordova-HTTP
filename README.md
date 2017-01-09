@@ -1,6 +1,29 @@
 cordovaHTTP
 ==================
 
+
+** WARNING
+
+This version of the cordova-HTTP plugin has been modified to add the capabilities to invoke Http queries using the PUT method and send json messages in the body content.
+
+    function httpPut(payload)
+    {
+        console.log("pushing information: " + JSON.stringify(payload));
+        //alert("pushing information... " + cordovaHTTP );
+        if (typeof cordovaHTTP !== 'undefined')
+        {
+            cordovaHTTP.setHeader("Content-Type", "application/json");
+            cordovaHTTP.put( BULK_API,
+            payload
+            , { Authorization: "OAuth2: token" }, function(response) {
+                 console.log("Status: " + response.status);
+             }, function(response) {
+                 console.log("Error: " + response.error);
+             });
+        }
+    }
+
+
 Cordova / Phonegap plugin for communicating with HTTP servers.  Supports iOS and Android.
 
 ## Advantages over Javascript requests
