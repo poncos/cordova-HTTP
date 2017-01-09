@@ -77,7 +77,7 @@ public class CordovaHttpPlugin extends CordovaPlugin {
 
             if (headersMap.containsKey("Content-Type") && headers.get("Content-Type").equals("application/json"))
             {
-                CordovaHttpPut put = new CordovaHttpPut(urlString, null, headersMap, callbackContext);
+                CordovaHttpPost put = new CordovaHttpPost(urlString, null, headersMap, callbackContext);
                 put.setBody(params.toString());
                 cordova.getThreadPool().execute(put);
             }
