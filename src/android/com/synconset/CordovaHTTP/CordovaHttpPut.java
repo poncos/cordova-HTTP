@@ -29,7 +29,14 @@ public class CordovaHttpPut extends CordovaHttp implements Runnable {
             this.setupSecurity(request);
             request.acceptCharset(CHARSET);
             request.headers(this.getHeaders());
-            request.form(this.getParams());
+            if (this.getBody() != null && !this.getBody().equals(""))
+            {
+                request.send(this.getBody());
+            }
+            else
+            {
+                request.form(this.getParams());
+            }
             int code = request.code();
             String body = request.body(CHARSET);
             JSONObject response = new JSONObject();

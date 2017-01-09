@@ -65,20 +65,52 @@ public class CordovaHttpPlugin extends CordovaPlugin {
             cordova.getThreadPool().execute(head);
         } else if (action.equals("post")) {
             String urlString = args.getString(0);
-            JSONObject params = args.getJSONObject(1);
+            Object params = null;
+            try {
+                params = args.getJSONObject(1);
+            } catch (Exception e)
+            {
+                params = args.getJSONArray(1);
+            }
             JSONObject headers = args.getJSONObject(2);
-            HashMap<?, ?> paramsMap = this.getMapFromJSONObject(params);
             HashMap<String, String> headersMap = this.getStringMapFromJSONObject(headers);
-            CordovaHttpPost post = new CordovaHttpPost(urlString, paramsMap, headersMap, callbackContext);
-            cordova.getThreadPool().execute(post);
-        } else if (action.equals("put")) {
-                String urlString = args.getString(0);
-                JSONObject params = args.getJSONObject(1);
-                JSONObject headers = args.getJSONObject(2);
-                HashMap<?, ?> paramsMap = this.getMapFromJSONObject(params);
-                HashMap<String, String> headersMap = this.getStringMapFromJSONObject(headers);
+
+            if (headersMap.containsKey("Content-Type") && headers.get("Content-Type").equals("application/json"))
+            {
+                CordovaHttpPut put = new CordovaHttpPut(urlString, null, headersMap, callbackContext);
+                put.setBody(params.toString());
+                cordova.getThreadPool().execute(put);
+            }
+            else
+            {
+                HashMap<?, ?> paramsMap = this.getMapFromJSONObject((JSONObject) params);
                 CordovaHttpPut put = new CordovaHttpPut(urlString, paramsMap, headersMap, callbackContext);
                 cordova.getThreadPool().execute(put);
+            }
+        } else if (action.equals("put")) {
+            String urlString = args.getString(0);
+            Object params = null;
+            try {
+                params = args.getJSONObject(1);
+            } catch (Exception e)
+            {
+                params = args.getJSONArray(1);
+            }
+            JSONObject headers = args.getJSONObject(2);
+            HashMap<String, String> headersMap = this.getStringMapFromJSONObject(headers);
+
+            if (headersMap.containsKey("Content-Type") && headers.get("Content-Type").equals("application/json"))
+            {
+                CordovaHttpPut put = new CordovaHttpPut(urlString, null, headersMap, callbackContext);
+                put.setBody(params.toString());
+                cordova.getThreadPool().execute(put);
+            }
+            else
+            {
+                HashMap<?, ?> paramsMap = this.getMapFromJSONObject((JSONObject) params);
+                CordovaHttpPut put = new CordovaHttpPut(urlString, paramsMap, headersMap, callbackContext);
+                cordova.getThreadPool().execute(put);
+            }
         } else if (action.equals("enableSSLPinning")) {
             try {
                 boolean enable = args.getBoolean(0);
