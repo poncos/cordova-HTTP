@@ -2,18 +2,16 @@ cordovaHTTP
 ==================
 
 
-** WARNING
+** INFO
 
 This version of the cordova-HTTP plugin has been modified to add the capabilities to invoke Http queries using the PUT method and send json messages in the body content.
 
     function httpPut(payload)
     {
-        console.log("pushing information: " + JSON.stringify(payload));
-        //alert("pushing information... " + cordovaHTTP );
         if (typeof cordovaHTTP !== 'undefined')
         {
             cordovaHTTP.setHeader("Content-Type", "application/json");
-            cordovaHTTP.put( BULK_API,
+            cordovaHTTP.put( url,
             payload
             , { Authorization: "OAuth2: token" }, function(response) {
                  console.log("Status: " + response.status);
