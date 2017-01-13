@@ -6,7 +6,7 @@ cordovaHTTP
 
 This version of the cordova-HTTP plugin has been modified to add the capabilities to invoke Http queries using the PUT method and send json messages in the body content.
 
-Json format is supported for PUT and POST indicating the header "Content-Type" with value "application/json", as example the listing below.
+Json format is supported for PUT and POST indicating the header "Content-Type" with value "application/json", as example the listing below, where "payload" is a json message.
 
     function httpPut(payload)
     {
